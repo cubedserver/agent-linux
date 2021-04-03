@@ -3,9 +3,9 @@
 # Set environment
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-SERVER_KEY=$(cat /opt/deployer/serverkey)
-GATEWAY=$(cat /opt/deployer/gateway)
-AGENT_VERSION="1.1"
+SERVERKEY=$(cat /opt/cubedserver/serverkey)
+GATEWAY=$(cat /opt/cubedserver/gateway)
+AGENT_VERSION="1.0.0"
 
 function get_os() {
 	if [ -f /etc/lsb-release ]; then
@@ -55,7 +55,7 @@ function get_ping_latency() {
 
 POST="$POST{agent_version}$AGENT_VERSION{/agent_version}"
 
-POST="$POST{serverkey}$SERVER_KEY{/serverkey}"
+POST="$POST{serverkey}$SERVERKEY{/serverkey}"
 
 POST="$POST{gateway}$GATEWAY{/gateway}"
 
@@ -191,9 +191,15 @@ processes=$(ps -e -o pid,ppid,rss,vsz,uname,pmem,pcpu,comm,cmd --sort=-pcpu,-pme
 POST="$POST{processes}$processes{/processes}"
 
 # Upload data
-# -m max-time in seconds
-# -k insecure
-# -s silent
-# -d data
 
-echo "data=$POST" | curl -m 50 -k -s -d @- "$GATEWAY"
+curl --max-time 50 --insecure --connect-timeout 60 --silent "$GATEWAY" \
+-H "User-Agent: CubedAgent (Shell Script v$AGENT_VERSION)" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+--data @<(cat <<EOF
+    {
+      "serverkey": "$SERVERKEY",
+      "data": "$POST"
+    }
+EOF
+)
