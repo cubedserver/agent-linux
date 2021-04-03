@@ -1,4 +1,4 @@
-# Cubed Agent (Shell Script)
+# Cubed Agent Linux
 
 This repository contains the source code for the Cubed Agent. A small script that is used to collect server metrics. Please note that to use this you'll need to first sign up for an account at https://cubedserver.com
 
