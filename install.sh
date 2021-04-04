@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Set environment
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-SERVERKEY=$1
-GATEWAY=$2
 AGENT_URL=https://raw.githubusercontent.com/cubedserver/agent-linux/main/agent.sh
 LOG=/tmp/cubedserver.log
+
+SERVERKEY=$1
+GATEWAY=$2
 
 echo -e "\e[32mWelcome to Cubed Agent Installer!\e[0m\n"
 

@@ -59,141 +59,135 @@ function get_ping_latency() {
 	echo "$ping_google"
 }
 
-merge_data 'agent_version' $AGENT_VERSION
-
-merge_data 'serverkey' $SERVERKEY
-
-merge_data 'gateway' $GATEWAY
-
 # Hostname
 hostname=$(hostname)
-merge_data 'hostname' $hostname
+merge_data 'hostname' "$hostname"
 
 # Kernel
 kernel=$(uname -r)
-merge_data 'kernel' $kernel
+merge_data 'kernel' "$kernel"
 
 # Time
 time=$(date +%s)
-merge_data 'time' $time
+merge_data 'time' "$time"
 
 # OS
 os=$(get_os)
-merge_data 'os' $os
+merge_data 'os' "$os"
 
 # OS Arch
 os_arch=`uname -m`","`uname -p`
-merge_data 'os_arch' $os_arch
+merge_data 'os_arch' "$os_arch"
 
 # CPU Model
 cpu_model=$(cat /proc/cpuinfo | grep 'model name' | awk -F\: '{print $2}' | uniq)
-merge_data 'cpu_model' $cpu_model
+merge_data 'cpu_model' "$cpu_model"
 
 # CPU Cores
 cpu_cores=$(cat /proc/cpuinfo | grep processor | wc -l)
-merge_data 'cpu_cores' $cpu_cores
+merge_data 'cpu_cores' "$cpu_cores"
 
 # CPU Speed
 cpu_speed=$(get_cpu_speed)
-merge_data 'cpu_speed' $cpu_speed
+merge_data 'cpu_speed' "$cpu_speed"
 
 # CPU Load
 cpu_load=$(cat /proc/loadavg | awk '{print $1","$2","$3}')
-merge_data 'cpu_load' $cpu_load
+merge_data 'cpu_load' "$cpu_load"
 
 # CPU Info
 cpu_info=$(grep -i cpu /proc/stat | awk '{print $1","$2","$3","$4","$5","$6","$7","$8","$9","$10","$11";"}' | tr -d '\n')
-merge_data 'cpu_info' $cpu_info
+merge_data 'cpu_info' "$cpu_info"
 
 sleep 1s
 
 cpu_info_current=$(grep -i cpu /proc/stat | awk '{print $1","$2","$3","$4","$5","$6","$7","$8","$9","$10","$11";"}' | tr -d '\n')
-merge_data 'cpu_info_current' $cpu_info_current
+merge_data 'cpu_info_current' "$cpu_info_current"
 
 # Disks
 disks=$(df -P -T -B 1k | grep '^/' | awk '{print $1","$2","$3","$4","$5","$6","$7";"}' | tr -d '\n')
-merge_data 'disks' $disks
+merge_data 'disks' "$disks"
 
 # Disk Usage
 disks_inodes=$(df -P -i | grep '^/' | awk '{print $1","$2","$3","$4","$5","$6";"}' | tr -d '\n')
-merge_data 'disks_inodes' $disks_inodes
+merge_data 'disks_inodes' "$disks_inodes"
 
 # File Descriptors
 file_descriptors=$(cat /proc/sys/fs/file-nr | awk '{print $1","$2","$3}')
-merge_data 'file_descriptors' $file_descriptors
+merge_data 'file_descriptors' "$file_descriptors"
 
 # RAM Total
 ram_total=$(free | grep ^Mem: | awk '{print $2}')
-merge_data 'ram_total' $ram_total
+merge_data 'ram_total' "$ram_total"
 
 # RAM Free
 ram_free=$(free | grep ^Mem: | awk '{print $4}')
-merge_data 'ram_free' $ram_free
+merge_data 'ram_free' "$ram_free"
 
 # RAM Caches
 ram_caches=$(free | grep ^Mem: | awk '{print $6}')
-merge_data 'ram_caches' $ram_caches
+merge_data 'ram_caches' "$ram_caches"
 
 # RAM Buffers
 ram_buffers=0
-merge_data 'ram_buffers' $ram_buffers
+merge_data 'ram_buffers' "$ram_buffers"
 
 # RAM USAGE
 ram_usage=$(free | grep ^Mem: | awk '{print $3}')
-merge_data 'ram_usage' $ram_usage
+merge_data 'ram_usage' "$ram_usage"
 
 # SWAP Total
 swap_total=$(cat /proc/meminfo | grep ^SwapTotal: | awk '{print $2}')
-merge_data 'swap_total' $swap_total
+merge_data 'swap_total' "$swap_total"
 
 # SWAP Free
 swap_free=$(cat /proc/meminfo | grep ^SwapFree: | awk '{print $2}')
-merge_data 'swap_free' $swap_free
+merge_data 'swap_free' "$swap_free"
 
 # SWAP Usage
 swap_usage=$(($swap_total-$swap_free))
-merge_data 'swap_usage' $swap_usage
+merge_data 'swap_usage' "$swap_usage"
 
 # Default Interface
 default_interface=$(get_default_interface)
-merge_data 'default_interface' $default_interface
+merge_data 'default_interface' "$default_interface"
 
 # All Interfaces
 all_interfaces=$(tail -n +3 /proc/net/dev | tr ":" " " | awk '{print $1","$2","$10","$3","$11";"}' | tr -d ':' | tr -d '\n')
-merge_data 'all_interfaces' $all_interfaces
+merge_data 'all_interfaces' "$all_interfaces"
 
 sleep 1s
 
 all_interfaces_current=$(tail -n +3 /proc/net/dev | tr ":" " " | awk '{print $1","$2","$10","$3","$11";"}' | tr -d ':' | tr -d '\n')
-merge_data 'all_interfaces_current' $all_interfaces_current
+merge_data 'all_interfaces_current' "$all_interfaces_current"
 
 # IPv4 Addresses
 ipv4_addresses=$(ip -f inet -o addr show | awk '{split($4,a,"/"); print $2","a[1]";"}' | tr -d '\n')
-merge_data 'ipv4_addresses' $ipv4_addresses
+merge_data 'ipv4_addresses' "$ipv4_addresses"
 
 # IPv6 Addresses
 ipv6_addresses=$(ip -f inet6 -o addr show | awk '{split($4,a,"/"); print $2","a[1]";"}' | tr -d '\n')
-merge_data 'ipv6_addresses' $ipv6_addresses
+merge_data 'ipv6_addresses' "$ipv6_addresses"
 
 # Active Connections
 active_connections=$(get_active_connections)
-merge_data 'active_connections' $active_connections
+merge_data 'active_connections' "$active_connections"
 
 # Ping Latency
 ping_latency=$(get_ping_latency)
-merge_data 'ping_latency' $ping_latency
+merge_data 'ping_latency' "$ping_latency"
 
 # SSH Sessions
 ssh_sessions=$(who | wc -l)
-merge_data 'ssh_sessions' $ssh_sessions
+merge_data 'ssh_sessions' "$ssh_sessions"
 
 # Uptime
 uptime=$(cat /proc/uptime | awk '{print $1}')
-merge_data 'uptime' $uptime
+merge_data 'uptime' "$uptime"
 
 # Processes
 processes=$(ps -e -o pid,ppid,rss,vsz,uname,pmem,pcpu,comm,cmd --sort=-pcpu,-pmem | awk '{print $1","$2","$3","$4","$5","$6","$7","$8","$9";"}' | tr -d '\n')
-merge_data 'processes' $processes
+merge_data 'processes' "$processes"
 
 # Upload data
 

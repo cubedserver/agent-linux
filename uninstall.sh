@@ -1,28 +1,27 @@
 #!/bin/bash
 
-# Set environment
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-LOG=/tmp/deployer.log
+LOG=/tmp/cubedserver.log
 
-echo -e "\e[32mDeployer Agent Uninstaller\e[0m"
+echo -e "\e[32Cubed Agent Uninstaller\e[0m"
 
 # Are we running as root
 if [ $(id -u) != "0" ]; then
-	echo "nMon Agent uninstaller needs to be run with root priviliges"
+	echo "nCubed Agent uninstaller needs to be run with root priviliges"
 	echo "Try again with root privilileges"
 	exit 1;
 fi
 
 
-if [ -f /opt/deployer/agent.sh ]; then
+if [ -f /opt/cubedserver/agent.sh ]; then
 	# Remove folder
-	rm -rf /opt/deployer
+	rm -rf /opt/cubedserver
 	
 	# Remove crontab
-	crontab -r -u deployeragent >> $LOG 2>&1
+	crontab -r -u cubedagent >> $LOG 2>&1
 	
 	# Remove user
-	userdel deployeragent >> $LOG 2>&1
+	userdel cubedagent >> $LOG 2>&1
 fi
 
 # Setup complete
